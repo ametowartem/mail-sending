@@ -5,6 +5,7 @@ import { ConfigService } from '../core/config.service';
 import { MessageEntity } from '../message/message.entity';
 import { MessageService } from '../message/message.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import * as moment from 'moment';
 
 @Injectable()
 export class MailService {
@@ -28,7 +29,7 @@ export class MailService {
       email.recipient,
       email.subject,
       email.message,
-      new Date(new Date(email.time_sending).setSeconds(0)).toLocaleString(),
+      moment(new Date(email.time_sending).setSeconds(0)).unix(),
     );
     await this.messageService.add(message);
     if (!email.time_sending || email.time_sending === new Date()) {
@@ -45,7 +46,7 @@ export class MailService {
   @Cron(CronExpression.EVERY_MINUTE)
   async message_check() {
     this.logger.debug('Called every minute');
-    const exact_date = new Date(new Date().setSeconds(0)).toLocaleString();
+    const exact_date = moment(new Date().setSeconds(0)).unix();
     const messages = await this.messageService.findMessagesByTime(exact_date);
     messages.forEach((message) => {
       const messageData = {

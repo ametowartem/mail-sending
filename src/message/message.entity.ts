@@ -1,11 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import * as moment from 'moment';
 
 @Entity()
 export class MessageEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  time_sending: string;
+  time_sending: number;
   @Column()
   sender: string;
   @Column()
@@ -20,11 +21,11 @@ export class MessageEntity {
     recipient: string,
     subject: string,
     message: string,
-    time_sending?: string,
+    time_sending?: number,
     id?: number,
   ) {
     this.id = id;
-    this.time_sending = time_sending || new Date().toLocaleString();
+    this.time_sending = time_sending || moment().unix();
     this.sender = sender;
     this.recipient = recipient;
     this.subject = subject;

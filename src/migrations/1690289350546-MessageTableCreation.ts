@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
 
 export class MessageTableCreation1690289350546 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -49,6 +49,14 @@ export class MessageTableCreation1690289350546 implements MigrationInterface {
             isNullable: true,
           },
         ],
+      }),
+    );
+
+    await queryRunner.createIndex(
+      'message_entity',
+      new TableIndex({
+        name: 'uq__message_entity__time_sending',
+        columnNames: ['time_sending'],
       }),
     );
   }

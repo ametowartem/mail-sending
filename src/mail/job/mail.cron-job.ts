@@ -1,9 +1,10 @@
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { MAILGUN_PROVIDER } from './mail.provider';
-import { ConfigService } from '../core/config.service';
-import { MailService } from './mail.service';
-import { MessageEntity } from './message.entity';
+import { MAILGUN_PROVIDER } from '../mail.provider';
+import { ConfigService } from '../../core/config.service';
+import { MailService } from '../service/mail.service';
+import { MessageEntity } from '../entity/message.entity';
+import { MessageStatus } from '../const/message.status.enum';
 
 @Injectable()
 export class MailCronJob {
@@ -21,7 +22,9 @@ export class MailCronJob {
   async checkMessage() {
     this.logger.debug('Called every minute');
     const exact_date = new Date(new Date().setSeconds(0));
-    const messages = await this.mailService.findMessagesByTime(exact_date);
+    const messages = await this.mailService.findMessagesByTimeSending(
+      exact_date,
+    );
 
     messages.forEach((message: MessageEntity) => {
       const messageData = {
@@ -31,15 +34,19 @@ export class MailCronJob {
         text: message.message,
       };
 
-      this.mailService.setStatus(message.id);
-
       this.client.messages
         .create(this.configService.mailgunDomain, messageData)
         .then((res) => {
           this.logger.log(res);
+          this.mailService.setStatus(message.id, MessageStatus.Send);
         })
         .catch((err) => {
           this.logger.error(err);
+          this.mailService.setStatus(
+            message.id,
+            MessageStatus.Error,
+            err.message,
+          );
         });
     });
   }

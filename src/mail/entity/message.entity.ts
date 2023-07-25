@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { MessageStatus } from '../const/message.status.enum';
 
 @Entity('message_entity')
 export class MessageEntity {
@@ -21,7 +22,7 @@ export class MessageEntity {
   message: string;
 
   @Column()
-  status: string;
+  status: MessageStatus;
 
   @Column({ name: 'error_message' })
   errorMessage: string;
@@ -32,7 +33,7 @@ export class MessageEntity {
     subject: string,
     message: string,
     timeSending?: Date,
-    status?: string,
+    status?: MessageStatus,
     errorMessage?: string,
     id?: string,
   ) {
@@ -43,6 +44,6 @@ export class MessageEntity {
     this.subject = subject;
     this.message = message;
     this.errorMessage = errorMessage;
-    this.status = status || 'Pending';
+    this.status = status || MessageStatus.Pending;
   }
 }

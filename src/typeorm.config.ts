@@ -1,15 +1,16 @@
 import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
-import { MessageEntity } from './mail/message.entity';
+import { MessageEntity } from './mail/entity/message.entity';
+import * as process from 'process';
 
 dotenv.config();
 export default new DataSource({
   type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'root',
-  password: 'rootroot',
-  database: 'maildb',
+  host: process.env.DATABASE_HOST,
+  port: +process.env.DATABASE_PORT,
+  username: process.env.DATABASE_USERNAME,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
   entities: [MessageEntity],
   migrations: ['./src/migrations/*.ts'],
 });

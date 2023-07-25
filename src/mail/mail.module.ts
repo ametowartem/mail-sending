@@ -3,13 +3,14 @@ import { MailService } from './mail.service';
 import { appProviders } from './mail.provider';
 import { CoreModule } from '../core/core.module';
 import { MailController } from './mail.controller';
-import { MessageModule } from '../message/message.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { MailCronJob } from './mail.cron-job';
+import { MessageRepository } from './message.repository';
 
 @Module({
-  imports: [CoreModule, MessageModule, ScheduleModule.forRoot()],
+  imports: [CoreModule, ScheduleModule.forRoot()],
   controllers: [MailController],
-  providers: [MailService, ...appProviders],
+  providers: [MailService, ...appProviders, MailCronJob, MessageRepository],
   exports: [MailService],
 })
 export class MailModule {}

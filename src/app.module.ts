@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { CoreModule } from './core/core.module';
 import { MailModule } from './mail/mail.module';
 import { ConfigService } from './core/config.service';
-import { MessageEntity } from './message/message.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MessageEntity } from './mail/message.entity';
 
 @Module({
   imports: [
@@ -12,7 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRootAsync({
       imports: [CoreModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
+        type: 'postgres',
         host: configService.databaseHost,
         port: configService.databasePort,
         username: configService.databaseUsername,

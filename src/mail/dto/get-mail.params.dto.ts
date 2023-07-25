@@ -13,26 +13,30 @@ export class GetMailParamsDto {
   })
   @IsEmail()
   sender: string;
+
   @ApiProperty({
     example: 'ametowartem@gmail.com',
   })
   @IsEmail()
   @IsNotEmpty()
   recipient: string;
+
   @ApiProperty({
     example: 'test',
   })
   @IsString()
   @IsNotEmpty()
   subject: string;
+
   @ApiProperty({
     example: 'Hello world!',
   })
   @IsString()
   @IsNotEmpty()
   message: string;
+
   @ApiProperty()
   @IsOptional()
   @IsDateString()
-  time_sending: Date;
+  timeSending: Date;
 }

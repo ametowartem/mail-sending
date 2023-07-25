@@ -1,34 +1,48 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import * as moment from 'moment';
 
-@Entity()
+@Entity('message_entity')
 export class MessageEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @Column()
-  time_sending: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({ name: 'time_sending' })
+  timeSending: Date;
+
   @Column()
   sender: string;
+
   @Column()
   recipient: string;
+
   @Column()
   subject: string;
+
   @Column()
   message: string;
+
+  @Column()
+  status: string;
+
+  @Column({ name: 'error_message' })
+  errorMessage: string;
 
   constructor(
     sender: string,
     recipient: string,
     subject: string,
     message: string,
-    time_sending?: number,
-    id?: number,
+    timeSending?: Date,
+    status?: string,
+    errorMessage?: string,
+    id?: string,
   ) {
     this.id = id;
-    this.time_sending = time_sending || moment().unix();
+    this.timeSending = timeSending || new Date();
     this.sender = sender;
     this.recipient = recipient;
     this.subject = subject;
     this.message = message;
+    this.errorMessage = errorMessage;
+    this.status = status || 'Pending';
   }
 }

@@ -6,6 +6,7 @@ import { ApiResponse } from '@nestjs/swagger';
 @Controller('mail')
 export class MailController {
   constructor(private readonly mailService: MailService) {}
+
   @Post()
   @ApiResponse({
     status: HttpStatus.OK,
